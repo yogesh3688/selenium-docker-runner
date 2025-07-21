@@ -1,0 +1,41 @@
+services:
+  hub:
+    image: selenium/hub:latest
+    
+    
+  chrome:
+    image: selenium/node-chromium:latest
+    shm_size: '2g'
+    depends_on:
+      - hub
+    
+    environment:
+      - SE_EVENT_BUS_HOST=hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_MAX_SESSIONS=4
+      - SE_VNC_NO_PASSWORD=1
+  firefox:
+    image: selenium/node-firefox:latest
+    shm_size: '2g'
+    depends_on:
+      - hub
+    environment:
+      - SE_EVENT_BUS_HOST=hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_VNC_NO_PASSWORD=1
+  yogesh-selenium:
+    image: yogesh3688/selenium
+    depends_on:
+      - chrome
+    environment:
+      - BROWSER=firefox
+      - HUB_HOST=hub
+      - THREAD_COUNT=2
+      - TEST_SUITE=product-search.xml
+    volumes:
+      - ./output/yogesh-selenium-output:/home/selenium-docker/test-output
