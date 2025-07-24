@@ -6,7 +6,8 @@
 
         stage('Start Grid'){
             steps {
-            sh "docker compose -f grid.yaml up -d"
+                echo "Start Grid triigred"
+                sh "docker compose -f grid.yaml up -d"
             
             }
         }
